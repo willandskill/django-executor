@@ -1,0 +1,57 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+{% spaceless %}
+    <html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/management-executor.css' %}"/>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    </head>
+
+    <body cz-shortcut-listen="true">
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Django Management Executor</a>
+            </div>
+            <div id="navbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ admin_site_url }}">Go to django-admin</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="page-header">
+            <h1>Django Management Executor</h1>
+
+            <p class="lead">Manage your Django management commands by adding arguments/options and hit the "Run Command" button.<br>
+                If the <strong>"<i class="glyphicon glyphicon-play"></i> Run command"</strong> button is disabled and/or if the command is marked with <i class="text-danger">red color</i>, the management command is probably broken.</p>
+        </div>
+
+        {% block content %}{% endblock %}
+
+    </div>
+
+    <script src="{% static 'js/jquery-1.12.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/cookiesetter.js' %}"></script>
+    <script src="{% static 'js/management-executor.js' %}"></script>
+    </body>
+
+    </html>
+{% endspaceless %}

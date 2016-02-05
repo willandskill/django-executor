@@ -1,0 +1,68 @@
+{% extends 'django_executor/base.html' %}
+
+{% block content %}
+    <div id="std-response" class="terminal"></div>
+
+    {% for app in apps %}
+        <h2>
+            {{ app.app_name }}
+        </h2>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th style="width:30px">#</th>
+                <th style="width:200px">Name</th>
+                <th>Message</th>
+                <th style="width:400px">Arguments</th>
+                <th style="width:100px"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for command in app.commands %}
+                <tr class="{% if not command.success %}danger{% endif %}">
+                    <th scope="row">
+                        {{ forloop.counter }}
+                    </th>
+                    <td class="{% if command.success %}success{% endif %}">
+                        {{ command.command_name }}
+                    </td>
+                    <td>
+                        {% if command.message %}
+                            {{ command.message }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td class="{% if not command.available_options %}warning{% endif %}">
+                        <input data-command-name="{{ command.command_name }}" data-app-name="{{ app.app_name }}" type="text" class="form-control input-argv-raw" {% if not command.success %}disabled{% endif %}>
+                        {% if command.success %}
+                            <div class="help-block">
+                            {% if command.available_options %}
+                                {{ command.available_options }}
+                            {% else %}
+                                Couldn't find any options for command.
+                            {% endif %}
+                        {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-block btn-default btn-run-command" data-success-btn="{{ command.success }}" data-command-name="{{ command.command_name }}" data-app-name="{{ app.app_name }}" {% if not command.success %}disabled{% endif %}>
+                            <span class="active">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </span>
+
+                            <span class="default">
+                                <i class="glyphicon glyphicon-play"></i>
+                                Run command
+                            </span>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+    {% endfor %}
+
+{% endblock %}

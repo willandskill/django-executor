@@ -7,6 +7,8 @@ Manage your django management commands easily within your browser
 * ```./manage.py migrate django_executor```
 
 ## Manage management commands
+* Login to django administration
+* Set your user privileges to: *is_superuser = True*
 * Open /django-executor/ in browser
 
 ## Configuration

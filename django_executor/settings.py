@@ -1,6 +1,11 @@
-from django.conf import settings
 from importlib import import_module
 import os
+
+from django.conf import settings
+try:
+    from django.core.urlresolvers import clear_url_caches, reverse, NoReverseMatch
+except ImportError:
+    from django.urls import clear_url_caches, reverse, NoReverseMatch
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -20,7 +25,6 @@ if hasattr(settings, 'DJANGO_EXECUTOR_CONFIG'):
 
 # Patch app urls with root urlconf
 def patch_root_urlconf():
-    from django.core.urlresolvers import clear_url_caches, reverse, NoReverseMatch
     from . import urls
 
     try:

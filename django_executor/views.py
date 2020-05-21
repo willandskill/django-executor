@@ -2,7 +2,11 @@ from django.views.generic import TemplateView, View
 from django.utils import timezone
 from django.http import JsonResponse
 from django.core.exceptions import PermissionDenied
-from django.core import urlresolvers
+try:
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
+
 from .base import ManagementUtility, ManagementExecutor
 from .models import Log
 
@@ -20,7 +24,7 @@ class ManagementCommandListView(TemplateView):
 
         utility = ManagementUtility()
         context = self.get_context_data(**kwargs)
-        admin_site_url = urlresolvers.reverse("admin:index")
+        admin_site_url = reverse("admin:index")
         context.update({'apps': utility.get_apps_with_commands(), 'admin_site_url': admin_site_url})
         return self.render_to_response(context)
 

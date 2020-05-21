@@ -12,7 +12,13 @@ from .models import Log
 
 
 def has_permission(request):
-    return request.user.is_authenticated() and request.user.is_superuser
+    user = request.user
+    try:
+        # Django 1.9 and lower need method invocation
+        # https://code.djangoproject.com/ticket/25847
+        return user.is_authenticated() and user.is_superuser
+    except TypeError:
+        return user.is_authenticated and user.is_superuser
 
 
 class ManagementCommandListView(TemplateView):

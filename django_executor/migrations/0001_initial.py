@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('stderr', models.TextField(null=True)),
                 ('started_at', models.DateTimeField()),
                 ('ended_at', models.DateTimeField()),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
             ],
         ),
     ]

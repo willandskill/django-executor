@@ -62,7 +62,10 @@ class ManagementExecutor(object):
 
 class ManagementUtility(object):
     def find_management_module(self, app_name):
-        path = os.path.join(__import__(app_name, fromlist="mangement").__path__[0], "management")
+        try:
+            path = os.path.join(__import__(app_name, fromlist="mangement").__path__[0], "management")
+        except ImportError:
+            return
         return path if os.path.exists(path) else None
 
     def get_app_names(self):

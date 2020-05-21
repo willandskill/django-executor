@@ -1,6 +1,7 @@
 from django.core.management import find_commands, load_command_class
 from django.utils.encoding import force_str
 from django.conf import settings
+import argparse
 import os
 import sys
 import shlex
@@ -80,6 +81,12 @@ class ManagementUtility(object):
 
     def get_available_options(self, command_class):
         options = []
+
+        if hasattr(command_class, 'add_arguments'):
+            parser = argparse.ArgumentParser('dummy')
+            args = command_class.add_arguments(parser)
+            usage = parser.format_usage()
+            return usage[len('usage: dummy '):]
 
         for option in command_class.option_list:
             opt_name = option.get_opt_string()

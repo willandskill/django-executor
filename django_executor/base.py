@@ -1,12 +1,17 @@
 from django.core.management import find_commands, load_command_class
 from django.utils.encoding import force_str
 from django.conf import settings
-from django_executor.settings import CONFIG
-from cStringIO import StringIO
 import os
 import sys
 import shlex
 import traceback
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+
+from .settings import CONFIG
 
 
 class FunctionOutputWrapper(object):
@@ -47,7 +52,7 @@ class ManagementExecutor(object):
     def execute(self):
         try:
             self.run_with_argv_raw(self.argv_raw)
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def execute_and_retrieve_std(self):
@@ -99,7 +104,7 @@ class ManagementUtility(object):
                             'message': command_class.help,
                             'available_options': available_options
                         })
-                    except Exception, e:
+                    except Exception as e:
                         command.update({
                             'success': False,
                             'message': force_str(e)

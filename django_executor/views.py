@@ -3,8 +3,8 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.core.exceptions import PermissionDenied
 from django.core import urlresolvers
-from base import ManagementUtility, ManagementExecutor
-from models import Log
+from .base import ManagementUtility, ManagementExecutor
+from .models import Log
 
 
 def has_permission(request):

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from settings import CONFIG
-from models import Log
+from .settings import CONFIG
+from .models import Log
 
 
 class LogAdmin(admin.ModelAdmin):

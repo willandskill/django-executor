@@ -1,6 +1,11 @@
-from django.conf import settings
 from importlib import import_module
 import os
+
+from django.conf import settings
+try:
+    from django.core.urlresolvers import clear_url_caches, reverse, NoReverseMatch
+except ImportError:
+    from django.urls import clear_url_caches, reverse, NoReverseMatch
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -14,14 +19,13 @@ DEFAULT_CONFIG = {
 # Update CONFIG with user added configuration
 CONFIG = DEFAULT_CONFIG.copy()
 if hasattr(settings, 'DJANGO_EXECUTOR_CONFIG'):
-    for key, value in settings.DJANGO_EXECUTOR_CONFIG.iteritems():
+    for key, value in settings.DJANGO_EXECUTOR_CONFIG.items():
         CONFIG[key] = value
 
 
 # Patch app urls with root urlconf
 def patch_root_urlconf():
-    from django.core.urlresolvers import clear_url_caches, reverse, NoReverseMatch
-    import urls
+    from . import urls
 
     try:
         reverse('django_executor:index')

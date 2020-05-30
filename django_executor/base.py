@@ -1,12 +1,18 @@
 from django.core.management import find_commands, load_command_class
 from django.utils.encoding import force_str
 from django.conf import settings
-from django_executor.settings import CONFIG
-from cStringIO import StringIO
+import argparse
 import os
 import sys
 import shlex
 import traceback
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+
+from .settings import CONFIG
 
 
 class FunctionOutputWrapper(object):
@@ -47,7 +53,7 @@ class ManagementExecutor(object):
     def execute(self):
         try:
             self.run_with_argv_raw(self.argv_raw)
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def execute_and_retrieve_std(self):
@@ -57,7 +63,10 @@ class ManagementExecutor(object):
 
 class ManagementUtility(object):
     def find_management_module(self, app_name):
-        path = os.path.join(__import__(app_name, fromlist="mangement").__path__[0], "management")
+        try:
+            path = os.path.join(__import__(app_name, fromlist="mangement").__path__[0], "management")
+        except ImportError:
+            return
         return path if os.path.exists(path) else None
 
     def get_app_names(self):
@@ -72,6 +81,12 @@ class ManagementUtility(object):
 
     def get_available_options(self, command_class):
         options = []
+
+        if hasattr(command_class, 'add_arguments'):
+            parser = argparse.ArgumentParser('dummy')
+            args = command_class.add_arguments(parser)
+            usage = parser.format_usage()
+            return usage[len('usage: dummy '):]
 
         for option in command_class.option_list:
             opt_name = option.get_opt_string()
@@ -99,7 +114,7 @@ class ManagementUtility(object):
                             'message': command_class.help,
                             'available_options': available_options
                         })
-                    except Exception, e:
+                    except Exception as e:
                         command.update({
                             'success': False,
                             'message': force_str(e)

@@ -3,7 +3,8 @@ from django.conf import settings
 
 
 class Log(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+                             on_delete=models.SET_NULL)
     app_name = models.TextField(null=True)
     command_name = models.TextField(null=True)
     argv_raw = models.TextField(null=True)
